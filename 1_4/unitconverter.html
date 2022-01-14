@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <div id="root"></div>
+</body>
+<!--react import-->
+<!--React.JS 엔진, React-dom : react element를 html에 두는 역할-->
+<script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+    //기존에는 HTML을 만들고 자바스크립트로 불러왔다면
+    //React에서는 자바스크립트에서 만들고 HTML로 띄움으로 html을 빠르게 수정할 수 있다.
+    const root = document.getElementById("root");
+    
+    function MinutestoHours() {
+        //state가 바뀌면 자동으로 리렌더링을 함.
+        const [amount, setAmount] = React.useState();
+        const [flipped, setFlipped] = React.useState(false);
+
+        const onChange = (event) => {
+            // console.log(event.target.value);
+            setAmount(event.target.value);
+        };
+        const reset = () => setAmount(0);
+        const onFlip = () => {
+            reset();
+            setFlipped((current) => !current);
+        }
+        return(
+            <div>
+                <div>
+                    <label htmlfor="minutes">Minutes</label>
+                    <input  
+                        value={flipped ? amount*60 : amount} 
+                        id="minutes" 
+                        placeholder="minutes" 
+                        type="number" 
+                        onChange={onChange} 
+                        disabled={flipped === true}
+                    />
+                </div>
+                <h4> YOu want to convert {amount}</h4>
+                <div>
+                    <label htmlfor="hours">Hours</label>
+                    <input 
+                        value={flipped ? amount : Math.round(amount/60)} 
+                        id="hours" 
+                        placeholder="hours" 
+                        type="number" 
+                        onChange={onChange} 
+                        disabled={flipped === false}
+                    />
+                </div>
+                <button onClick={reset}>Reset</button>
+                <button onClick={onFlip}>{flipped ? "turn back" : "invert"}</button>
+            </div>
+        );
+    }
+    
+    function KmToMiles(){
+        return <h3>KM 2 M</h3>
+    }
+    
+    function App() {
+        const [index, setIndex] = React.useState("xx");
+        const onSelect = (event) => {
+            setIndex(event.target.value);
+        };
+        return(
+            <div>
+                <h1>Super Converter</h1>
+                <select value={index} onChange={onSelect}>
+                    <option value="xx">Select your units</option>
+                    <option value="0">Minutes & Hours</option>
+                    <option value="1">Km & Miles</option>  
+                </select>
+                <hr/>
+                {index === "xx" ? "please select your unit" : null}
+                {index === "0" ? <MinutestoHours /> : null}
+                {index === "1" ? <KmToMiles /> : null}
+            </div>
+        );
+    }
+    
+    //컴포넌트 첫 글자는 대문자로 적어야한다.
+    ReactDOM.render(<App />, root);
+</script>
+</html>
